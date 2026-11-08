@@ -3,7 +3,7 @@
 
 PuntDeInteresBotigaSolucio::PuntDeInteresBotigaSolucio()
 {
-
+    m_wheelchair = false;
 }
 
 std::string PuntDeInteresBotigaSolucio::getName() 

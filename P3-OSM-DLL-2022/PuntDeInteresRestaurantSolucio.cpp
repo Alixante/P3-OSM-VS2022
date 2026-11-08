@@ -3,8 +3,14 @@
 
 PuntDeInteresRestaurantSolucio::PuntDeInteresRestaurantSolucio()
 {
-
+    m_wheelchair = false;
 }
+
+std::string PuntDeInteresRestaurantSolucio::getName()
+{
+    return PuntDeInteresBase::getName();
+}
+
 
 unsigned int PuntDeInteresRestaurantSolucio::getColor()
 {
