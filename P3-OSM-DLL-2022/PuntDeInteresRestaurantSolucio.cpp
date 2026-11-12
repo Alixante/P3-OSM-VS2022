@@ -10,7 +10,7 @@ PuntDeInteresRestaurantSolucio::PuntDeInteresRestaurantSolucio()
 
 std::string PuntDeInteresRestaurantSolucio::getName()
 {
-    return this->getName();
+    return PuntDeInteresBase::getName();
 }
 
 

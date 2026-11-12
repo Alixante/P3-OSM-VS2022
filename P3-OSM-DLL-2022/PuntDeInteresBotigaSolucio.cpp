@@ -8,7 +8,7 @@ PuntDeInteresBotigaSolucio::PuntDeInteresBotigaSolucio()
 
 std::string PuntDeInteresBotigaSolucio::getName() 
 {
-    return this->getName();
+    return PuntDeInteresBase::getName();
 }
 
 
