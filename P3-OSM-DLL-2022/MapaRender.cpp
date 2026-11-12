@@ -2,6 +2,8 @@
 #include "MapaRender.h"
 #include "Util.h"
 
+#include "MapaSolucio.h"
+
 #if defined(_MSC_VER)  // Aquest arxiu només a WPF Gràfic (no a Caronte)
 
 MapaRender* MapaRender::m_singleton = nullptr;
@@ -11,7 +13,9 @@ MapaRender::MapaRender() {
     this->m_xml4osm_util = new XML4OSMUtil();
     
     // TODO: Cal que instancieu m_mapaBase amb la vostra MapaSolucio
-    this->m_mapaBase = nullptr;
+    //this->m_mapaBase = nullptr;
+    this->m_mapaBase = new MapaSolucio();
+
 }
 
 // DO NOT TOUCH THIS

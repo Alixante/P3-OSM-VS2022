@@ -1,14 +1,16 @@
 #include "pch.h"
 #include "PuntDeInteresRestaurantSolucio.h"
 
+
 PuntDeInteresRestaurantSolucio::PuntDeInteresRestaurantSolucio()
-{
+    : PuntDeInteresBase() {
+    m_tipusCuina = "";
     m_wheelchair = false;
 }
 
 std::string PuntDeInteresRestaurantSolucio::getName()
 {
-    return PuntDeInteresBase::getName();
+    return this->getName();
 }
 
 
