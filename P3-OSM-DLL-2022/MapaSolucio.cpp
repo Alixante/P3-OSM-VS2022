@@ -40,6 +40,6 @@ void MapaSolucio::getCamins(std::vector<CamiBase*>& cami)
 
 void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 {
-
+	//NO PUEDO MAS CHAT ESTO LO ACABO MAÑANAAAAAAAA
 }
 
