@@ -125,8 +125,12 @@ void MapaSolucio::insertPdis(XmlElement& x)
 
 void MapaSolucio::insertCami(XmlElement& x)
 {
+	
+	std::string ref = 
+	
 	//AÑADE EL CAMINO CON SU REF DE KEY Y SU CAMISOLUCIO DE VALOR A m_camins en MapaSolucio
 	//PONE TODOS LOS REFS DE NODOS DE CAMINO EN m_refsNodes de CamiSolucio
+	//Referencia 
 }
 
 void MapaSolucio::insertNode(XmlElement& x)
@@ -207,7 +211,7 @@ bool MapaSolucio::findValueAtribut(XmlElement& x, const std::string& searchStrin
 		}
 	}
 }
-bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString)
+bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString, const std::string& referencia)
 {
 	for (int i = 0; i < x.fills.size(); i++) {
 		// Iterem i avaluem tots els fills que son tags
@@ -221,6 +225,23 @@ bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString)
 					//(valorTag.second == "yes") ? true : false;
 				return true;
 			}
+		}
+		else if (x.fills[i].first == "nd")
+		{
+			const std::string& ref = x.fills[i].second;
+
+			size_t ini = ref.find("ref=\"") + 5;
+			size_t fin = ref.find('"', ini);
+			std::string valorRef = ref.substr(ini, fin - ini);
+
+			std::pair<std::string, std::string> valorNd("ref", valorRef);
+
+			if (valorNd.second == referencia)
+			{
+				return true;
+			}
+
+
 		}
 	}
 	return false;
@@ -242,7 +263,9 @@ std::string MapaSolucio::extractValueFills(XmlElement& x, const std::string& sea
 {
 	for (int i = 0; i < x.fills.size(); i++) {
 		// Iterem i avaluem tots els fills que son tags
-		if (x.fills[i].first == "tag") {
+		//if (x.fills[i].first == "tag") { 
+			//no todos son tag
+			
 			// Emmagatzemem el valor d’aquest tag
 			std::pair<std::string, std::string> valorTag =
 				Util::kvDeTag(x.fills[i].second);
@@ -252,7 +275,7 @@ std::string MapaSolucio::extractValueFills(XmlElement& x, const std::string& sea
 					//(valorTag.second == "yes") ? true : false;
 				return valorTag.second;
 			}
-		}
+		//}
 	}
 
 }
