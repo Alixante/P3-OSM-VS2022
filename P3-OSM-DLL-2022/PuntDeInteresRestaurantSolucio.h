@@ -25,4 +25,7 @@ public:
     Coordinate getCoord();
     unsigned int getColor() override;
 
+    void setTipusCuina(std::string tipus) { m_tipusCuina = tipus; }
+    void setWheelchair(bool wheel) { m_wheelchair = wheel; }
+
 };

@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "PuntDeInteresBotigaSolucio.h"
+#include "Common.h"
 
 PuntDeInteresBotigaSolucio::PuntDeInteresBotigaSolucio()
 {
     m_wheelchair = false;
 }
 
-std::string PuntDeInteresBotigaSolucio::getName() 
+
+std::string PuntDeInteresBotigaSolucio::getName()
 {
     return PuntDeInteresBase::getName();
 }
