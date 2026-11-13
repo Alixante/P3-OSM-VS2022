@@ -32,6 +32,9 @@ void MapaSolucio::getPdis(std::vector<PuntDeInteresBase*>& pdis) //Pasar puntos 
 	pdis.push_back(new PuntDeInteresRestaurantSolucio("regional", true, cordenada2, "El Millor Restaurant"));
 	*/
 
+	for (auto it = m_puntsInteres.begin();it != m_puntsInteres.end();it++) {
+		pdis.push_back(it->second);
+	}
 
 }
 
@@ -40,7 +43,12 @@ void MapaSolucio::getPdis(std::vector<PuntDeInteresBase*>& pdis) //Pasar puntos 
 void MapaSolucio::getCamins(std::vector<CamiBase*>& cami)
 {
 	cami.clear();
-	cami.push_back(new CamiSolucio());
+	//cami.push_back(new CamiSolucio());
+
+	for (int i = 0; i < m_camins.size(); i++)
+	{
+		cami.push_back(m_camins[i]);
+	}
 	
 
 }
@@ -56,9 +64,12 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 	std::vector<XmlElement>::iterator it;
 	for (it = xmlElements.begin(); it != xmlElements.end(); it++)
 	{
+		Util::escriuEnMonitor(it->id_element);
 		//Si es way, te id_elemnt == "way"
 		if (it->id_element == "way")
 		{
+			Util::escriuEnMonitor("Found way!");
+
 			insertCami(*it);
 		}
 		
@@ -76,6 +87,12 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 			}
 		}
 	}
+
+	Util::escriuEnMonitor("P=" + std::to_string(m_puntsInteres.size()) +
+		" C=" + std::to_string(m_camins.size()));	
+	processNodesIntoCamins();
+
+	//Util::escriuEnMonitor("Tot processat");
 
 
 }
@@ -106,7 +123,7 @@ bool MapaSolucio::isPdis(std::vector<XmlElement>::iterator it)
 }
 
 //Los pdis no tienen ni highway ni public transport ni entrance y tienen el tag name
-
+/*
 void MapaSolucio::insertPdis(XmlElement& x)
 {
 
@@ -125,19 +142,40 @@ void MapaSolucio::insertPdis(XmlElement& x)
 	}
 
 	m_puntsInteres.insert(std::make_pair(ref, pdis));
-}
+}*/
+void MapaSolucio::insertPdis(XmlElement& x)
+{
 
+	PuntDeInteresBase* pdis = nullptr;
+	std::string ref = extractValueAtribut(x, "id");
+	//Separar botiga de restaurant
+
+	if (findValueFills(x, "amenity", ""))
+	{
+		pdis = constructRestaurant(x);
+	}
+	else if (findValueFills(x, "shop", ""))
+	{
+		pdis = constructBotiga(x);
+	}
+
+	if (pdis != nullptr) {
+		m_puntsInteres.insert(std::make_pair(ref, pdis));
+	}
+}
+/*
 void MapaSolucio::insertCami(XmlElement& x)
 {
 
 	CamiSolucio* cSolucio;
-	std::string id = extractValueAtribut(x, "id");
+	/*std::string id = extractValueAtribut(x, "id");
 
 	//if (findValueFills(x, id))
 	//{
 	m_camins.insert(std::make_pair(id, cSolucio));
 	//}
-
+	
+	m_camins.push_back(cSolucio);
 	for (int i = 0; i < x.fills.size(); i++) {
 
 		if (x.fills[i].first == "nd") {
@@ -153,6 +191,54 @@ void MapaSolucio::insertCami(XmlElement& x)
 	//AÑADE EL CAMINO CON SU REF DE KEY Y SU CAMISOLUCIO DE VALOR A m_camins en MapaSolucio
 	//PONE TODOS LOS REFS DE NODOS DE CAMINO EN m_refsNodes de CamiSolucio
 	//Referencia 
+}
+*/
+
+/*void MapaSolucio::insertCami(XmlElement& x)
+{
+	CamiSolucio* cSolucio = new CamiSolucio();  // INICIALIZAR EL PUNTERO
+
+	m_camins.push_back(cSolucio);
+	for (int i = 0; i < x.fills.size(); i++) {
+
+		if (x.fills[i].first == "nd") {
+			std::pair<std::string, std::string> valorTag =
+				Util::kvDeTag(x.fills[i].second);
+			//if (valorTag.first == "ref") {
+				cSolucio->addNodeId(valorTag.second);
+			//}
+		}
+	}
+}
+*/
+
+
+void MapaSolucio::insertCami(XmlElement& x)
+{
+	// Nomes highway
+	if (!findValueFills(x, "highway", ""))
+	{
+		return;
+	}
+
+	CamiSolucio* cSolucio = new CamiSolucio();
+
+	for (size_t i = 0; i < x.fills.size(); i++)
+	{
+		if (x.fills[i].first == "nd")
+		{
+			// El <nd> te un sol atribut: ("ref", "id"). No es un tag k/v.
+			for (size_t j = 0; j < x.fills[i].second.size(); j++)
+			{
+				if (x.fills[i].second[j].first == "ref")
+				{
+					cSolucio->addNodeId(x.fills[i].second[j].second);
+				}
+			}
+		}
+	}
+
+	m_camins.push_back(cSolucio);
 }
 
 void MapaSolucio::insertNode(XmlElement& x)
@@ -182,15 +268,34 @@ void MapaSolucio::processNodesIntoCamins()
 	// RECORRE TODOS LOS CAMINOS EN m_camins. 
 	// MIRA LAS REFS DE TODOS LOS NODOS GUARDADOS EN m_refsNodes de CamiSolucio,
 	// LOS BUSCA EN m_nodesVia de MapaSOlucio USANDO EL REF, Y LOS METE EN m_coordsNodes de CamiSolucio
-
-	for(int i = 0; )
+	std::vector<std::string> refNodes;
+	Coordinate coords;
+	Util::escriuEnMonitor("Hi ha n camins: " + std::to_string(m_camins.size()));
+	for (int i = 0; i < m_camins.size(); i++)
+	{
+		//Util::escriuEnMonitor("Processat");
+		refNodes = m_camins[i]->getRefsNodes();
+		for (int j = 0; j < refNodes.size(); j++)
+		{
+			auto it = m_nodesVia.find(refNodes[j]);
+			if (it != m_nodesVia.end()) {
+				coords = it->second;
+				m_camins[i]->addCoords(coords);
+				//Util::escriuEnMonitor(refNodes[j]);
+			}
+			else {
+				//Util::escriuEnMonitor("Nodo no trobat: ");
+				//Util::escriuEnMonitor(refNodes[j]);
+			}
+		}
+	}
 
 }
 
 PuntDeInteresBotigaSolucio* MapaSolucio::constructBotiga(XmlElement& x)
 {
 	
-	std::string name = extractValueAtribut(x, "name");
+	std::string name = extractValueFills(x, "name", "");
 	Coordinate coords = extractCoordinates(x);
 	std::string shopValue = extractValueFills(x, "shop", "");
 	std::string opening_hours;
@@ -218,7 +323,7 @@ PuntDeInteresBotigaSolucio* MapaSolucio::constructBotiga(XmlElement& x)
 
 PuntDeInteresRestaurantSolucio* MapaSolucio::constructRestaurant(XmlElement& x)
 {
-	std::string name = extractValueAtribut(x, "name");
+	std::string name = extractValueFills(x, "name", "");
 	Coordinate coords = extractCoordinates(x);
 	std::string tipusCuina;
 	std::string wheelchairValue;
@@ -251,6 +356,7 @@ bool MapaSolucio::findValueAtribut(XmlElement& x, const std::string& searchStrin
 			return true;
 		}
 	}
+	return false;
 }
 bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString, const std::string& referencia = "")
 {
@@ -283,13 +389,14 @@ bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString,
 
 std::string MapaSolucio::extractValueAtribut(XmlElement& x, const std::string& searchString)
 {
-	for (int i = 0; i < x.fills.size(); i++)
+	for (int i = 0; i < x.atributs.size(); i++)
 	{
 		if (x.atributs[i].first == searchString)
 		{
 			return x.atributs[i].second;
 		}
 	}
+	return "0";
 }
 
 
@@ -321,7 +428,7 @@ std::string MapaSolucio::extractValueFills(XmlElement& x, const std::string& sea
 			}
 		}
 	}
-
+	return "0";
 }
 
 Coordinate MapaSolucio::extractCoordinates(XmlElement& x)

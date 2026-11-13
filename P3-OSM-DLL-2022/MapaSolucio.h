@@ -4,6 +4,7 @@
 #include "MapaBase.h"
 #include "PuntDeInteresBotigaSolucio.h"
 #include "PuntDeInteresRestaurantSolucio.h"
+#include "CamiSolucio.h"
 #include <unordered_map>
 
 class MapaSolucio : public MapaBase
@@ -24,8 +25,8 @@ public:
 private:
 
 	std::unordered_map<std::string, Coordinate> m_nodesVia;
-	std::unordered_map<std::string, CamiBase*> m_camins;
-	
+	//std::unordered_map<std::string, CamiBase*> m_camins;
+	std::vector<CamiSolucio*> m_camins;
 	std::unordered_map<std::string, PuntDeInteresBase*> m_puntsInteres;
 
 
