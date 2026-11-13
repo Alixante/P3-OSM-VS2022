@@ -61,6 +61,11 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 	//afegirem tots a m_puntsInteres i despres afegirem als camins
 	//Anirem pels camins d'un en un, treient les refs de m_puntsInteres i afegintlos a 
 
+	for (size_t i = 0; i < m_camins.size(); i++) delete m_camins[i];
+	m_camins.clear();
+	m_puntsInteres.clear();
+	m_nodesVia.clear();
+
 	std::vector<XmlElement>::iterator it;
 	for (it = xmlElements.begin(); it != xmlElements.end(); it++)
 	{
