@@ -13,3 +13,8 @@ std::vector<Coordinate> CamiSolucio::getCamiCoords()
         {41.4939882, 2.1456419 }
     };
 }
+
+void CamiSolucio::addNodeId(std::string id)
+{
+    m_refsNodes.push_back(id);
+}

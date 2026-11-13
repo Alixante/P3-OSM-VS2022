@@ -20,6 +20,7 @@
 
 void MapaSolucio::getPdis(std::vector<PuntDeInteresBase*>& pdis) //Pasar puntos de interes a mapa solución
 {
+	/*
 	pdis.clear();
 
 	Coordinate cordenada1 = {41.4918606, 2.146541};
@@ -29,6 +30,9 @@ void MapaSolucio::getPdis(std::vector<PuntDeInteresBase*>& pdis) //Pasar puntos 
 
 	Coordinate cordenada2 = {41.4902204, 2.1406477};
 	pdis.push_back(new PuntDeInteresRestaurantSolucio("regional", true, cordenada2, "El Millor Restaurant"));
+	*/
+
+
 }
 
 
@@ -126,10 +130,25 @@ void MapaSolucio::insertPdis(XmlElement& x)
 void MapaSolucio::insertCami(XmlElement& x)
 {
 
-	CamiBase* cBase;
-	std::string ref = extractValueAtribut(x, "id");
+	CamiSolucio* cSolucio;
+	std::string id = extractValueAtribut(x, "id");
 
-	if(findValueFills())
+	//if (findValueFills(x, id))
+	//{
+	m_camins.insert(std::make_pair(id, cSolucio));
+	//}
+
+	for (int i = 0; i < x.fills.size(); i++) {
+
+		if (x.fills[i].first == "nd") {
+			std::pair<std::string, std::string> valorTag =
+				Util::kvDeTag(x.fills[i].second);
+			if (valorTag.first == "ref") {
+				cSolucio->addNodeId(valorTag.second);
+			}
+		}
+	}
+	
 	
 	//AÑADE EL CAMINO CON SU REF DE KEY Y SU CAMISOLUCIO DE VALOR A m_camins en MapaSolucio
 	//PONE TODOS LOS REFS DE NODOS DE CAMINO EN m_refsNodes de CamiSolucio
@@ -139,7 +158,23 @@ void MapaSolucio::insertCami(XmlElement& x)
 void MapaSolucio::insertNode(XmlElement& x)
 {
 	//AÑADE EL NODO CON SU REF COMO KEY Y SUS COORDS COMO VALOR A m_nodesVIa de MapaSolucio
+	std::string id = extractValueAtribut(x, "id");
 
+	Coordinate coords;
+
+	double lat = std::stod(extractValueAtribut(x, "lat"));
+	double lon = std::stod(extractValueAtribut(x, "lon"));
+
+	coords.lat = lat;
+	coords.lon = lon;
+
+
+	std::pair<std::string, Coordinate> nodo;
+
+	nodo.first = id;
+	nodo.second = coords;
+
+	m_nodesVia.insert(nodo);
 }
 
 void MapaSolucio::processNodesIntoCamins()
@@ -147,6 +182,9 @@ void MapaSolucio::processNodesIntoCamins()
 	// RECORRE TODOS LOS CAMINOS EN m_camins. 
 	// MIRA LAS REFS DE TODOS LOS NODOS GUARDADOS EN m_refsNodes de CamiSolucio,
 	// LOS BUSCA EN m_nodesVia de MapaSOlucio USANDO EL REF, Y LOS METE EN m_coordsNodes de CamiSolucio
+
+
+
 }
 
 PuntDeInteresBotigaSolucio* MapaSolucio::constructBotiga(XmlElement& x)
@@ -276,7 +314,7 @@ std::string MapaSolucio::extractValueFills(XmlElement& x, const std::string& sea
 		{
 			for (int j = 0; j < x.fills[i].second.size(); j++)
 			{
-				if (x.fills[i].second[j].first == "ref" && x.fills[i].second[j].second == referencia)
+				if (x.fills[i].second[j].first == "ref")
 				{
 					return referencia;
 				}

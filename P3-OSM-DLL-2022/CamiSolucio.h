@@ -8,6 +8,7 @@ class CamiSolucio : public CamiBase
 {
 	public:
 		std::vector<Coordinate> getCamiCoords() override;
+		void addNodeId(std::string id);
 
 	private:
 		std::vector<std::string> m_refsNodes;
