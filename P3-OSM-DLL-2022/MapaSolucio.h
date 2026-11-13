@@ -14,7 +14,7 @@ public:
 	// SI TE DA TIEMPO, 
 	//___________________________________
 
-	void getPdis(std::vector<PuntDeInteresBase*>&) override; //Pasar puntos de interes a mapa solución
+	void getPdis(std::vector<PuntDeInteresBase*>&) override; //EJERCICIO 3 Pasar puntos de interes a mapa solución 
 	void getCamins(std::vector<CamiBase*>&) override;
 
 	//______________________________________________________
@@ -34,10 +34,10 @@ private:
 	//POR HACER
 	//_______________________________________________________
 
-	void insertPdis(XmlElement& x);
-	void insertCami(XmlElement& x);
-	void insertNode(XmlElement& x);
-	void processNodesIntoCamins();
+	void insertPdis(XmlElement& x); //COMPLETADO
+	void insertCami(XmlElement& x); //EJERCICIO 1
+	void insertNode(XmlElement& x); //EJERCICIO 2
+	void processNodesIntoCamins(); //LO DEJAS PA LUEGO
 
 	//___________________________________________________
 
