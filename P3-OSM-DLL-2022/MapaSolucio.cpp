@@ -64,11 +64,11 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 	std::vector<XmlElement>::iterator it;
 	for (it = xmlElements.begin(); it != xmlElements.end(); it++)
 	{
-		Util::escriuEnMonitor(it->id_element);
+		//Util::escriuEnMonitor(it->id_element);
 		//Si es way, te id_elemnt == "way"
 		if (it->id_element == "way")
 		{
-			Util::escriuEnMonitor("Found way!");
+			//Util::escriuEnMonitor("Found way!");
 
 			insertCami(*it);
 		}
@@ -88,8 +88,8 @@ void MapaSolucio::parsejaXmlElements(std::vector<XmlElement>& xmlElements)
 		}
 	}
 
-	Util::escriuEnMonitor("P=" + std::to_string(m_puntsInteres.size()) +
-		" C=" + std::to_string(m_camins.size()));	
+	//Util::escriuEnMonitor("P=" + std::to_string(m_puntsInteres.size()) +
+		//" C=" + std::to_string(m_camins.size()));	
 	processNodesIntoCamins();
 
 	//Util::escriuEnMonitor("Tot processat");
@@ -270,7 +270,7 @@ void MapaSolucio::processNodesIntoCamins()
 	// LOS BUSCA EN m_nodesVia de MapaSOlucio USANDO EL REF, Y LOS METE EN m_coordsNodes de CamiSolucio
 	std::vector<std::string> refNodes;
 	Coordinate coords;
-	Util::escriuEnMonitor("Hi ha n camins: " + std::to_string(m_camins.size()));
+	//Util::escriuEnMonitor("Hi ha n camins: " + std::to_string(m_camins.size()));
 	for (int i = 0; i < m_camins.size(); i++)
 	{
 		//Util::escriuEnMonitor("Processat");

@@ -1,5 +1,6 @@
 #pragma once
 #include "Common.h"
+#include "Util.h"
 #include <vector>
 #include "MapaBase.h"
 #include "PuntDeInteresBotigaSolucio.h"
