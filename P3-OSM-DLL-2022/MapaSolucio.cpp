@@ -110,12 +110,12 @@ void MapaSolucio::insertPdis(XmlElement& x)
 	std::string ref = extractValueAtribut(x, "id");
 	//Separar botiga de restaurant
 
-	if (findValueFills(x, "amenity"))
+	if (findValueFills(x, "amenity", ""))
 	{
 		pdis = constructRestaurant(x);
 	}
 
-	else if(findValueFills(x, "shop"))
+	else if(findValueFills(x, "shop", ""))
 	{
 		pdis = constructBotiga(x);
 	}
@@ -125,8 +125,11 @@ void MapaSolucio::insertPdis(XmlElement& x)
 
 void MapaSolucio::insertCami(XmlElement& x)
 {
-	
-	std::string ref = 
+
+	CamiBase* cBase;
+	std::string ref = extractValueAtribut(x, "id");
+
+	if(findValueFills())
 	
 	//AÑADE EL CAMINO CON SU REF DE KEY Y SU CAMISOLUCIO DE VALOR A m_camins en MapaSolucio
 	//PONE TODOS LOS REFS DE NODOS DE CAMINO EN m_refsNodes de CamiSolucio
@@ -151,13 +154,13 @@ PuntDeInteresBotigaSolucio* MapaSolucio::constructBotiga(XmlElement& x)
 	
 	std::string name = extractValueAtribut(x, "name");
 	Coordinate coords = extractCoordinates(x);
-	std::string shopValue = extractValueFills(x, "shop");
+	std::string shopValue = extractValueFills(x, "shop", "");
 	std::string opening_hours;
 	std::string wheelchairValue;
 	bool wheelchair = false;;
-	if (findValueFills(x, "wheelchair"))
+	if (findValueFills(x, "wheelchair", ""))
 	{
-		wheelchairValue = extractValueFills(x, "wheelchair");
+		wheelchairValue = extractValueFills(x, "wheelchair", "");
 		
 	}
 	if (wheelchairValue == "yes")
@@ -165,9 +168,9 @@ PuntDeInteresBotigaSolucio* MapaSolucio::constructBotiga(XmlElement& x)
 		wheelchair = true;
 	}
 
-	if (findValueFills(x, "opening_hours"))
+	if (findValueFills(x, "opening_hours", ""))
 	{
-		opening_hours = extractValueFills(x, "opening_hours");
+		opening_hours = extractValueFills(x, "opening_hours", "");
 	}
 	
 
@@ -183,18 +186,18 @@ PuntDeInteresRestaurantSolucio* MapaSolucio::constructRestaurant(XmlElement& x)
 	std::string wheelchairValue;
 	bool wheelchair = false;;
 
-	if (findValueFills(x, "wheelchair"))
+	if (findValueFills(x, "wheelchair", ""))
 	{
-		wheelchairValue = extractValueFills(x, "wheelchair");
+		wheelchairValue = extractValueFills(x, "wheelchair", "");
 
 	}
 	if (wheelchairValue == "yes")
 	{
 		wheelchair = true;
 	}
-	if (findValueFills(x, "cuisine"))
+	if (findValueFills(x, "cuisine", ""))
 	{
-		tipusCuina = extractValueFills(x, "cuisine");
+		tipusCuina = extractValueFills(x, "cuisine", "");
 	}
 
 	return new PuntDeInteresRestaurantSolucio(tipusCuina, wheelchair, coords, name);
@@ -211,7 +214,7 @@ bool MapaSolucio::findValueAtribut(XmlElement& x, const std::string& searchStrin
 		}
 	}
 }
-bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString, const std::string& referencia)
+bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString, const std::string& referencia = "")
 {
 	for (int i = 0; i < x.fills.size(); i++) {
 		// Iterem i avaluem tots els fills que son tags
