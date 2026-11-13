@@ -228,20 +228,13 @@ bool MapaSolucio::findValueFills(XmlElement& x, const std::string& searchString,
 		}
 		else if (x.fills[i].first == "nd")
 		{
-			const std::string& ref = x.fills[i].second;
-
-			size_t ini = ref.find("ref=\"") + 5;
-			size_t fin = ref.find('"', ini);
-			std::string valorRef = ref.substr(ini, fin - ini);
-
-			std::pair<std::string, std::string> valorNd("ref", valorRef);
-
-			if (valorNd.second == referencia)
+			for (int j = 0; j < x.fills[i].second.size(); j++)
 			{
-				return true;
+				if (x.fills[i].second[j].first == "ref" && x.fills[i].second[j].second == referencia)
+				{
+					return true;
+				}
 			}
-
-
 		}
 	}
 	return false;
@@ -259,11 +252,11 @@ std::string MapaSolucio::extractValueAtribut(XmlElement& x, const std::string& s
 }
 
 
-std::string MapaSolucio::extractValueFills(XmlElement& x, const std::string& searchString)
+std::string MapaSolucio::extractValueFills(XmlElement& x, const std::string& searchString, const std::string& referencia)
 {
 	for (int i = 0; i < x.fills.size(); i++) {
 		// Iterem i avaluem tots els fills que son tags
-		//if (x.fills[i].first == "tag") { 
+		if (x.fills[i].first == "tag") { 
 			//no todos son tag
 			
 			// Emmagatzemem el valor d’aquest tag
@@ -275,7 +268,17 @@ std::string MapaSolucio::extractValueFills(XmlElement& x, const std::string& sea
 					//(valorTag.second == "yes") ? true : false;
 				return valorTag.second;
 			}
-		//}
+		}
+		else if (x.fills[i].first == "nd")
+		{
+			for (int j = 0; j < x.fills[i].second.size(); j++)
+			{
+				if (x.fills[i].second[j].first == "ref" && x.fills[i].second[j].second == referencia)
+				{
+					return referencia;
+				}
+			}
+		}
 	}
 
 }

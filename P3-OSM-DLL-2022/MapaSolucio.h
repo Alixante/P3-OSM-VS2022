@@ -50,7 +50,7 @@ private:
 	bool findValueAtribut(XmlElement& x, const std::string& searchString);
 	bool findValueFills(XmlElement& x, const std::string& searchString, const std::string& referencia);
 	std::string extractValueAtribut(XmlElement& x, const std::string& searchString);
-	std::string extractValueFills(XmlElement& x, const std::string& searchString);
+	std::string extractValueFills(XmlElement& x, const std::string& searchString, const std::string& referencia);
 	Coordinate extractCoordinates(XmlElement& x);
 
 
