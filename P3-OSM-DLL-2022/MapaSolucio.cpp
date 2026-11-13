@@ -183,7 +183,7 @@ void MapaSolucio::processNodesIntoCamins()
 	// MIRA LAS REFS DE TODOS LOS NODOS GUARDADOS EN m_refsNodes de CamiSolucio,
 	// LOS BUSCA EN m_nodesVia de MapaSOlucio USANDO EL REF, Y LOS METE EN m_coordsNodes de CamiSolucio
 
-
+	for(int i = 0; )
 
 }
 

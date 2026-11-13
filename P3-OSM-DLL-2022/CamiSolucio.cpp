@@ -5,16 +5,17 @@
 
 std::vector<Coordinate> CamiSolucio::getCamiCoords()
 {
-
-    return std::vector<Coordinate>{
-        {41.4928803, 2.1452381},
-        {41.4929072, 2.1452474 },
-        {41.4933070, 2.1453852 },
-        {41.4939882, 2.1456419 }
-    };
+    return m_coordsNodes;
 }
 
 void CamiSolucio::addNodeId(std::string id)
 {
     m_refsNodes.push_back(id);
 }
+
+void CamiSolucio::addCoords(Coordinate& coords)
+{
+    m_coordsNodes.push_back(coords);
+}
+
+
